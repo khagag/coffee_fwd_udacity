@@ -58,13 +58,27 @@ def get_drinks_detail():
 '''
 @app.route('/drinks',methods=['POST'])
 def createDrink():
-    drink = Drink(
-    
-    )
+    # print(request.json)
+    data = request.json
+    data2 = request.get_json()
+    # drink = Drink({
+    #     'title':data['title'],
+    #     'recipe':data['recipe']
+    # })
+    drink = Drink()
+    drink.title= data['title']
+    drink.recipe=json.dumps(data['recipe'])
     drink.insert()
-    return ({
+
+    # drink.insert().value(
+    #     title=request.form.get('title'),
+    #     recipe=request.form.get('recipe')
+    # )
+    # db.session.add(drink)
+    # db.session.commit()
+    return jsonify({
     "success": True,
-    "drinks": drink
+    "drinks": [drink.long()]
     })
 
 '''
