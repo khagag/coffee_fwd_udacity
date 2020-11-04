@@ -31,7 +31,17 @@ class AuthError(Exception):
     return the token part of the header
 '''
 def get_token_auth_header():
-   raise Exception('Not Implemented')
+    if '' not in request.headers:
+        raise Exception('Not Implemented')
+    try:
+        header = request.headers['Authorization']
+        header = header.split(' ')
+        if header.len() != 2:
+            raise Exception('Not Implemented')
+        header = header[1]
+    except Exception as e:
+        raise Exception('Not Implemented')
+    return header
 
 '''
 @TODO implement check_permissions(permission, payload) method
@@ -45,7 +55,11 @@ def get_token_auth_header():
     return true otherwise
 '''
 def check_permissions(permission, payload):
-    raise Exception('Not Implemented')
+    if 'permissions' not in payload :
+        raise Exception('Not Implemented')
+    if permission not in payload['permissions']:
+        raise Exception('Not Implemented')
+    return payload
 
 '''
 @TODO implement verify_decode_jwt(token) method
