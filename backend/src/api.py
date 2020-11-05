@@ -56,6 +56,7 @@ def get_drinks_detail():
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the newly created drink
         or appropriate status code indicating reason for failure
 '''
+@requires_auth
 @app.route('/drinks',methods=['POST'])
 def createDrink():
     # print(request.json)
@@ -92,7 +93,20 @@ def createDrink():
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the updated drink
         or appropriate status code indicating reason for failure
 '''
-
+@requires_auth('drinks:patch')
+@app.route('/drinks/<int:id>',methods=['PATCH'])
+def update_drinks(id):
+    drink = Drink.query.get(id)
+    if drink is None:
+        abort(404)
+    data = request.json
+    drink.title = data['title']
+    drink.recipe = json.dumps(data['recipe'])
+    drink.update()
+    return jsonify({
+    'drinks':drink.long(),
+    'success':True
+    })
 
 '''
 @TODO implement endpoint
